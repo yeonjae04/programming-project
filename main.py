@@ -1,6 +1,2 @@
-print("Hello, World!")
-print("hello")
-print("hi")
-print("으악")
-print("d왜 안되는거야!!1!")
-print("ㅛㄷㅁ")
+name = input("오늘의 날짜는?:")
+print("멋진 하루 되시길!")
