@@ -15,4 +15,12 @@ def get_choices(choice:str, use_name:str):
     else:
         print("잘못된 입력입니다. 1~3번 중 하나를 선택하여 주세요.")
 
-
+def main():
+    #이름 받고 인사하는 부분!
+    while True:
+        print("\n무엇을 하시겠습니까?")
+        print("\n1. 오늘 일기 작성")
+        print("\n2. 과거 일기 확인")
+        print("\n 3. 과거 일기 분석 보기")
+        choice = input("번호를 선택하세요: ").strip()
+        get_choices(choice)
