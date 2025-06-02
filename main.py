@@ -8,6 +8,7 @@ import requests
 
 name = input("이름을 입력해주세요.:")
 
+#사용자의 일기 데이터 저장 함수
 DATA_SAVE = Path("diary_data")
 DATA_SAVE.mkdir(exist_ok = True)
 
@@ -38,6 +39,7 @@ def save_diary_dta(date_str, name, diary, summary, advice, emotion):
     
     print(f"{date_str} 일기가 저장되었습니다!->{file_path}")
 
+#사용자 일기 요약 함수
 def get_summary(diary):
     response = requests.post(
         url="https://openrouter.ai/api/v1/chat/completions",
@@ -63,6 +65,7 @@ def get_summary(diary):
     else:
         print("요청실패")
 
+#사용자 일기 조언 함수
 def get_advice(diary):
     response = requests.post(
         url="https://openrouter.ai/api/v1/chat/completions",
@@ -110,6 +113,7 @@ def get_choices(choice:str):
     else:
         print("잘못된 입력입니다. 1~3번 중 하나를 선택하여 주세요.")
 
+#사용자 질문 함수
 def main():
 
     while True:
