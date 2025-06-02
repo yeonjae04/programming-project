@@ -6,8 +6,37 @@ from collections import Counter
 import random
 import requests
 
-name = input("이름을 입력해주세요.: ")
-print(f"{name}님 안녕하세요!")
+name = input("이름을 입력해주세요.:")
+
+DATA_SAVE = Path("diary_data")
+DATA_SAVE.mkdir(exist_ok = True)
+
+def save_diary_dta(date_str, name, diary, summary, advice, emotion):
+    """
+    하루치 일기 데이터를 JSON 파일로 저장합니다
+    
+    Parameters:
+    -date_str (str): 날짜 (예: 2025-06-01)
+    -name (str): 사용자 이름
+    -diary (str): 원본 일기 텍스트
+    -summary (str): 요약 텍스트
+    -advice (str): 조언 텍스트
+    -emotion(dict): 감정 분석 결과 
+    """
+    data = {
+        "name": name,
+        "data": date_str,
+        "diary": diary,
+        "summary": summary,
+        "advice": advice,
+        "emotion": emotion
+    }
+
+    file_path = DATA_SAVE / F"{date_str}_{name}.json"
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+    
+    print(f"{date_str} 일기가 저장되었습니다!->{file_path}")
 
 def get_summary(diary):
     response = requests.post(
@@ -46,7 +75,7 @@ def get_advice(diary):
             "messages": [
             {
                 "role": "user",
-                "content": f"다음 일기를 보고 조언을 해줘.\n{diary}"
+                "content": f"다음 일기를 요약하고 감정 분석과 조언을 해줘.\n{diary}"
             } 
     ],
     
@@ -60,7 +89,7 @@ def get_advice(diary):
         print("요청실패")
 
 #사용자 선택 처리 함수
-def get_choices(choice:str, use_name:str):
+def get_choices(choice:str):
     if choice == '1':
         print("\n오늘의 일기를 작성해주세요.")
         diary = input("오늘의 일기를 입력: ")
@@ -82,11 +111,12 @@ def get_choices(choice:str, use_name:str):
         print("잘못된 입력입니다. 1~3번 중 하나를 선택하여 주세요.")
 
 def main():
-    #이름 받고 인사하는 부분!
+
     while True:
         print("\n무엇을 하시겠습니까?")
         print("\n1. 오늘 일기 작성")
         print("\n2. 과거 일기 확인")
-        print("\n 3. 과거 일기 분석 보기")
+        print("\n3. 과거 일기 분석 보기")
         choice = input("번호를 선택하세요: ").strip()
         get_choices(choice)
+
