@@ -6,9 +6,10 @@ from collections import Counter
 import random
 import requests
 
-name = input("이름을 입력해주세요.:")
+name = input("이름을 입력해주세요.: ")
+print(f"{name}님 안녕하세요!")
 
-def get_advice(dairy):
+def get_summary(diary):
     response = requests.post(
         url="https://openrouter.ai/api/v1/chat/completions",
         headers={
@@ -20,18 +21,54 @@ def get_advice(dairy):
             "messages": [
             {
                 "role": "user",
-                "content": f"다음 일기를 요약하고 감정 분석과 조언을 해줘.\n{dairy}"
+                "content": f"다음 일기를 분석하고 그를 토대로 요약해줘. \n{diary}"
             } 
     ],
     
   })
 )
-    if respose
+    if response.ok:
+        result = response.json()
+        output = result["choices"][0]["message"]["content"]
+        return output
+    else:
+        print("요청실패")
+
+def get_advice(diary):
+    response = requests.post(
+        url="https://openrouter.ai/api/v1/chat/completions",
+        headers={
+            "Authorization": "Bearer <OPENROUTER_API_KEY>",
+            "Content-Type": "application/json"
+  },
+        data=json.dumps({
+            "model": "meta-llama/llama-3.3-8b-instruct:free",
+            "messages": [
+            {
+                "role": "user",
+                "content": f"다음 일기를 보고 조언을 해줘.\n{diary}"
+            } 
+    ],
+    
+  })
+)
+    if response.ok:
+        result = response.json()
+        output = result["choices"][0]["message"]["content"]
+        return output
+    else:
+        print("요청실패")
+
 #사용자 선택 처리 함수
 def get_choices(choice:str, use_name:str):
     if choice == '1':
         print("\n오늘의 일기를 작성해주세요.")
         diary = input("오늘의 일기를 입력: ")
+
+        summary = get_summary(diary)
+        advice = get_advice(diary)
+        print("\n 요약:",summary)
+        print("\n 조언:",advice)
     
     elif choice == '2':
         date = input("언제 일기를 확인하시겠습니까?(2025-00-00)")
