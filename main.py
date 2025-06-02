@@ -1,3 +1,32 @@
+from pathlib import Path
+import json
+from datetime import datetime
+import matplotlib.pyplot as plt
+from collections import Counter
+import random
+import requests
+
+name = input("이름을 입력해주세요.:")
+
+def get_advice(dairy):
+    response = requests.post(
+        url="https://openrouter.ai/api/v1/chat/completions",
+        headers={
+            "Authorization": "Bearer <OPENROUTER_API_KEY>",
+            "Content-Type": "application/json"
+  },
+        data=json.dumps({
+            "model": "meta-llama/llama-3.3-8b-instruct:free",
+            "messages": [
+            {
+                "role": "user",
+                "content": f"다음 일기를 요약하고 감정 분석과 조언을 해줘.\n{dairy}"
+            } 
+    ],
+    
+  })
+)
+    if respose
 #사용자 선택 처리 함수
 def get_choices(choice:str, use_name:str):
     if choice == '1':
